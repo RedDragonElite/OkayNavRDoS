@@ -1,0 +1,54 @@
+    <!-------------------------------- 
+	*
+	*	Navigation Menu ( OkayNAV Version )
+	*
+	---------------------------------->
+	<?php // Use Navigation Text
+	if ($rde_isNavFixed = 0) { ?>
+		<header id="header" class="okayNav-header <?php echo RDE_NAVMENU_BACKGROUND; ?>">
+	<?php } else { ?>
+		<header id="header" class="okayNav-header fixedheader <?php echo RDE_NAVMENU_BACKGROUND; ?>">
+	<?php } ?>	
+	
+	<!-- Navigation Logo or Text -->
+	<?php // Use Navigation Text
+	if ($rde_navigationlogo = 0) { ?>
+		<a class="site-logo red-text" onclick="window.location.href='<?php echo RDE_SITEINFO[1]; ?>'" href="<?php echo RDE_SITEINFO[1]; ?>"><?php echo RDE_SITEINFO[0]; ?></a>
+	<?php } else { ?>
+		<a class="site-logo img-responsive" 
+		style="margin-bottom: <?php echo RDE_IMAGECFG[1]; ?>;" onclick="window.location.href='<?php echo RDE_SITEINFO[1]; ?>'" href="<?php echo RDE_SITEINFO[1]; ?>">
+		<img alt="Site Logo" src="<?php echo RDE_IMAGECFG[0]; ?>" width='<?php echo RDE_IMAGECFG[2]; ?>' height='<?php echo RDE_IMAGECFG[3]; ?>'></img></a>
+	<?php } ?>	
+
+	  <nav role="navigation" id="nav-main" class="<?php echo RDE_NAVMENU_BACKGROUND; ?> z-depth-3 okayNav">
+		<ul class="">
+			<!-- Create Main Menus -->
+										  
+				<?php
+					$stmt = $rde_connect_db->query("SELECT * FROM ". TABLE_PREFIX.TABLE_MAINMENU ."");
+					while($row = $stmt->fetch(PDO::FETCH_ASSOC))  
+				{ ?>
+				<li><a href="<?php echo $row['m_menu_link']; ?>" class="dropdown-trigger tooltipped" data-position="bottom" data-tooltip="<?php echo $row['m_menu_name']; ?>" data-target="dropdown<?php echo $row['m_menu_id']; ?>"><i class="material-icons white-text" style="font-size: 16px"><?php echo $row['m_menu_icon']; ?></i> <?php //echo $row['m_menu_name']; ?></a></li>
+											  
+				<!-- Create Sub Menus -->
+				<?php
+					$res_pro = $rde_connect_db->query("SELECT * FROM ". TABLE_PREFIX.TABLE_SUBMENU ." WHERE m_menu_id=".$row['m_menu_id']);
+				?>
+				<ul class="dropdown-content black" id="dropdown<?php echo $row['m_menu_id']; ?>">
+				<?php  
+					while($pro_row=$res_pro->fetch(PDO::FETCH_ASSOC))
+					{
+						?><li><a href="<?php echo $pro_row['s_menu_link']; ?>" target="<?php echo $pro_row['s_menu_target']; ?>"> <p class="xsmall red-text"><?php echo $pro_row['s_menu_name']; ?></p></a></li><?php
+					}
+				?>
+				</ul>
+
+				<?php
+				}
+				?>
+		</ul>
+	  </nav>
+	</header>
+	
+	<br></br><br></br>
+	
